@@ -11,9 +11,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+//@Service is a special type of @Controller notation that is use to create the service class
+//This contains Business logic i.e. all the task's that we have to perform those are written in service class
+//Step 1: We have to print the list of user from the db.
+
 public class UserServiceImpl implements UserServiceInterface{
 
-    @Autowired
+    @Autowired      //@Autowired is used to inject the dependency
     private UserRepository userRepository;
 
     @Override
@@ -47,9 +51,13 @@ public class UserServiceImpl implements UserServiceInterface{
     }
 
     @Override
+
     public Optional<User> getUserById(Long id) {
         Optional<User> all=userRepository.findById(id);
         return all;
     }
-
+    public List<User> findUserByAge(int age) {
+        List<User> all=userRepository.findAllByAge(age);
+        return all;
+        }
 }
