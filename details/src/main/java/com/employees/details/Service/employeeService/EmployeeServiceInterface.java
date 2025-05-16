@@ -14,4 +14,5 @@ public interface EmployeeServiceInterface
     public List<Employee> getAllEmployee();
     public Employee getEmployeeByEmail(String email);
     public List<Employee> getEmployeeByfirstNameAndSalary(String firstName, Long salary);
+
 }
