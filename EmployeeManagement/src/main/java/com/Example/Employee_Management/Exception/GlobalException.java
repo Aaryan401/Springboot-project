@@ -66,7 +66,7 @@ public class GlobalException {
     }
 
     @ExceptionHandler(UserAlreadyExistByThisNumberException.class)
-    public ResponseEntity<?> handleUserAlreadyExistByThisNumberException(UserAlreadyExistByThisNumberException userAlreadyExistByThisNumberException, WebRequest webRequest){
+    public ResponseEntity<?> handleUserAlreadyExistByThisNumberException(UserAlreadyExistByThisNumberException userAlreadyExistByThisNumberException, WebRequest webRequest) {
         return new ResponseEntity<>(userAlreadyExistByThisNumberException.getMessage(), HttpStatus.CONFLICT);
     }
 }

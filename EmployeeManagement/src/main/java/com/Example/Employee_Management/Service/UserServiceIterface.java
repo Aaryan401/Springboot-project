@@ -1,7 +1,6 @@
 package com.Example.Employee_Management.Service;
 
 import com.Example.Employee_Management.Entity.User;
-
 import java.util.List;
 
 public interface UserServiceIterface {
