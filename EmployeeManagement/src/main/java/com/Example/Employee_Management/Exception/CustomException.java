@@ -30,7 +30,11 @@ public class CustomException{
             super(message);
         }
     }
-
+    public static class UserNotFoundByNameException extends RuntimeException{
+        public UserNotFoundByNameException(String message){
+            super(message);
+        }
+    }
     public static class UserNotFoundByFirstNameAndEmailException extends RuntimeException{
         public UserNotFoundByFirstNameAndEmailException(String message){
             super(message);

@@ -11,6 +11,7 @@ public interface UserServiceIterface {
     public User getUserByLastName(String lastName);
     public User getUserByNumber(String number);
     public User getUserByEmail(String email);
+    public User getUserByFirstNameAndLastName(String firstName, String lastName);
     public User getUserByFirstNameAndEmail(String firstName, String email);
     public User getUserByLastNameAndEmail(String lastName, String email);
     public List<User> getAllUser();

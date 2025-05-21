@@ -13,29 +13,29 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Service
 public class UserServiceImpl implements UserServiceIterface {
-    private static final Logger logger = LoggerFactory.getLogger("UserServiceImpl.class");
+
     @Autowired
     private final UserRepository userRepository;
 
+    private static final Logger logger = LoggerFactory.getLogger("UserServiceImpl.class");
     @Override
     public String saveUser(User user) {
         if (userRepository.findUserByFirstNameAndLastName(user.getFirstName(), user.getLastName()).isPresent()) {
-            logger.error("User with name" +user.getFirstName()+" {} already exists", user.getLastName()); //Here {} tells that there's a data will come
+            logger.error("User with name" +user.getFirstName(), user.getLastName() +"already exists");
             throw new UserAlreadyExistsException("User with name " + user.getFirstName() + " " + user.getLastName() + " already exists");
         }
         userRepository.findUserByEmail(user.getEmail()).ifPresent(
                 user1 -> {
-                    logger.error("User with email" + user1.getEmail() + "already exists");
+                    logger.error("User with email {} already exists",user1.getEmail() );//Here {} tells that there's a data will come
                     throw new UserAlreadyExistByThisEmailException("User with email" + user1.getEmail() + "already exists");
                 }
         );
-        userRepository.findUserByNumber(user.getPhoneNumber()).ifPresent(
+        userRepository.findUserByNumber(user.getNumber()).ifPresent(
                 user1 -> {
-                    logger.error("User with number" + user1.getPhoneNumber() + "already exists");
-                    throw new UserAlreadyExistByThisNumberException("User with number" + user1.getPhoneNumber() + "already exists");
+                    logger.error("User with number" + user1.getNumber() + "already exists");
+                    throw new UserAlreadyExistByThisNumberException("User with number" + user1.getNumber() + "already exists");
                 }
         );
-        logger.info("User is going to registered");
         User user1 = userRepository.save(user);
         logger.info("User registered successfully");
         return ("User has been registered");
@@ -52,7 +52,6 @@ public class UserServiceImpl implements UserServiceIterface {
 
     @Override
     public User getUserByFirstName(String firstName) {
-        logger.info("User with first name" + firstName + "is going to be fetched");
         return userRepository.findUserByFirstName(firstName).orElseThrow(() -> { logger.warn("User with first name" + firstName + " has not present");
             return new UserNotFoundByFirstNameException("User" + firstName + "has not been found");
         });
@@ -62,7 +61,7 @@ public class UserServiceImpl implements UserServiceIterface {
     public User getUserByLastName(String lastName) {
         Optional<User> optionalUser = userRepository.findByLastName(lastName);
         if (optionalUser.isPresent()) {
-            logger.info("User with last name" + lastName + "is going to be fetched");
+            logger.info("User with last name" + lastName + "is present");
             return optionalUser.get();
         } else {
             logger.warn("User with last name" + lastName + " has not present");
@@ -74,7 +73,7 @@ public class UserServiceImpl implements UserServiceIterface {
     public User getUserByEmail(String email) {
         Optional<User> optional = userRepository.findUserByEmail(email);
         if (optional.isPresent()) {
-            logger.info("User with email" + email + "is going to be fetched");
+            logger.info("User with email" + email + "is present");
             return optional.get();
         } else {
             logger.warn("User with email" + email + " has not present");
@@ -84,16 +83,26 @@ public class UserServiceImpl implements UserServiceIterface {
 
     @Override
     public User getUserByNumber(String number) {
-        logger.info("User with number" + number + "is going to be fetched");
-        return userRepository.findUserByNumber(number).orElseThrow(() ->{ logger.warn("User with number" + number + " has not present");
+        User user= userRepository.findUserByNumber(number).orElseThrow(() ->{
+            logger.warn("User with number" + number + " has not present");
             return new UserNotFoundByNumberException("No User having this no." + number);
+        });
+        logger.info("User with number" + number + "is Present");
+        return user;
+    }
+
+    @Override
+    public User getUserByFirstNameAndLastName(String firstName, String lastName){
+        return userRepository.findUserByFirstNameAndLastName(firstName,lastName).orElseThrow(()->{
+        logger.warn("User with first name" + firstName + "and lastName" + lastName + " has not present");
+        return new UserNotFoundByNameException("User with name" + firstName+" "+ lastName + " has not present");
         });
     }
 
     @Override
     public User getUserByFirstNameAndEmail(String firstName, String email) {
-        logger.info("User with first name" + firstName + "and email" + email + "is going to be fetched");
-        return userRepository.findUserByFirstNameAndEmail(firstName, email).orElseThrow(() -> { logger.warn("User with first name" + firstName + "and email" + email + " has not present");
+        return userRepository.findUserByFirstNameAndEmail(firstName, email).orElseThrow(() -> {
+            logger.warn("User with first name" + firstName + "and email" + email + " has not present");
             return new UserNotFoundByFirstNameAndEmailException("User" + firstName + "has not been found with email" + email);
         });
     }
@@ -102,7 +111,7 @@ public class UserServiceImpl implements UserServiceIterface {
     public User getUserByLastNameAndEmail(String lastName, String email) {
         Optional<User> user = userRepository.findUserByLastNameAndEmail(lastName, email);
         if (user.isPresent()) {
-            logger.info("User with last name" + lastName + "and email" + email + "is going to be fetched");
+            logger.info("User with last name" + lastName + "and email" + email + "is present");
             return user.get();
         } else {
             logger.warn("User with last name" + lastName + "and email" + email + " has not present");
@@ -131,11 +140,11 @@ public class UserServiceImpl implements UserServiceIterface {
                 throw new UserAlreadyExistByThisEmailException("User with email" + user.getEmail() + "already exists can't update your email to this email");
             }
         }
-        userRepository.findUserByNumber(user.getPhoneNumber()).ifPresent(
+        userRepository.findUserByNumber(user.getNumber()).ifPresent(
                 user1 -> {
                     if (!user1.getUserId().equals(userId)) {
-                        logger.error("User with number" + user.getPhoneNumber() + "already exists");
-                        throw new UserAlreadyExistByThisNumberException("User with number" + user.getPhoneNumber() + "already exists can't update your number to this number");
+                        logger.error("User with number" + user.getNumber() + "already exists");
+                        throw new UserAlreadyExistByThisNumberException("User with number" + user.getNumber() + "already exists can't update your number to this number");
                     }
                 }
         );
@@ -143,24 +152,23 @@ public class UserServiceImpl implements UserServiceIterface {
             logger.warn("User with ID" + userId + "has not present");
             return new UserNotFoundException("User with ID" + userId + "has not been found");
         });
-            logger.info("User with ID" + userId + "is going to be updated");
             existingUser.setUserId(user.getUserId());
             existingUser.setFirstName(user.getFirstName());
             existingUser.setLastName(user.getLastName());
             existingUser.setEmail(user.getEmail());
-            existingUser.setPhoneNumber(user.getPhoneNumber());
+            existingUser.setNumber(user.getNumber());
+            logger.info("User with ID" + userId + "is updated successfully");
             return userRepository.save(existingUser);
     }
 
     @Override
     public String deleteUser(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> {
+            userRepository.findById(userId).orElseThrow(() -> {
                     logger.warn("User with ID {} is not present", userId);
                     return new UserNotFoundException("User with ID " + userId + " has not been found");
                 });
 
-        logger.info("User with ID {} is going to be deleted", userId);
+        logger.info("User having ID {} has present and deleting", userId);
         userRepository.deleteById(userId);
         logger.info("User with ID {} has been deleted successfully", userId);
         return "User with ID " + userId + " has been deleted successfully";
@@ -169,7 +177,7 @@ public class UserServiceImpl implements UserServiceIterface {
     @Override
     public String deleteUserByEmail(String email) {
         if (userRepository.findUserByEmail(email).isPresent()) {
-            logger.info("User having" + email + " is going to be deleted");
+            logger.info("User having ID {} has present and deleting", email);
             userRepository.deleteUserByEmail(email);
             logger.info("User having" + email + " has been deleted successfully");
             return "User having" + email + " has been deleted successfully";
