@@ -103,9 +103,9 @@ public class UserServiceImpl implements UserServiceIterface {
 
     @Override
     public User getUserByFirstNameAndEmail(String firstName, String email) {
-        return userRepository.findUserByFirstNameAndEmail(firstName, email).orElseThrow(() -> {
-            logger.warn("User with first name" + firstName + "and email" + email + " has not present");
-            return new UserNotFoundByFirstNameAndEmailException("User" + firstName + "has not been found with email" + email);
+        return userRepository.findUserByFirstNameAndEmail(firstName,email).orElseThrow(() -> {
+            logger.warn("User with first name " + firstName + " and email " + email + " has not present");
+            return new UserNotFoundByFirstNameAndEmailException("User having name " + firstName + " has not been found with email" + email);
         });
     }
 
@@ -135,17 +135,17 @@ public class UserServiceImpl implements UserServiceIterface {
     }
 
     @Override
-    public User updateUser(User user, Long userId) {
+    public User updateUser(Long userId, User user) {
         if (userRepository.findUserByEmail(user.getEmail()).isPresent()) {
             if (!userRepository.findUserByEmail(user.getEmail()).get().getUserId().equals(userId)) {
                 logger.error("User with email" + user.getEmail() + "already exists");
-                throw new UserAlreadyExistByThisEmailException("User with email" + user.getEmail() + "already exists can't update your email to this email");
+                throw new UserAlreadyExistByThisEmailException("User with email " + user.getEmail() + " already exists can't update your email to this email");
             }
         }
         userRepository.findUserByNumber(user.getNumber()).ifPresent(
                 user1 -> {
                     if (!user1.getUserId().equals(userId)) {
-                        logger.error("User with number" + user.getNumber() + "already exists");
+                        logger.error("User with number " + user.getNumber() + " already exists");
                         throw new UserAlreadyExistByThisNumberException("User with number" + user.getNumber() + "already exists can't update your number to this number");
                     }
                 }
@@ -154,7 +154,6 @@ public class UserServiceImpl implements UserServiceIterface {
             logger.warn("User with ID" + userId + "has not present");
             return new UserNotFoundException("User with ID" + userId + "has not been found");
         });
-            existingUser.setUserId(user.getUserId());
             existingUser.setFirstName(user.getFirstName());
             existingUser.setLastName(user.getLastName());
             existingUser.setEmail(user.getEmail());
@@ -179,13 +178,61 @@ public class UserServiceImpl implements UserServiceIterface {
     @Override
     public String deleteUserByEmail(String email) {
         if (userRepository.findUserByEmail(email).isPresent()) {
-            logger.info("User having ID {} has present and deleting", email);
+            logger.info("User having Email {} has present and deleting", email);
             userRepository.deleteUserByEmail(email);
-            logger.info("User having" + email + " has been deleted successfully");
-            return "User having" + email + " has been deleted successfully";
+            logger.info("User having email" + email + " has been deleted successfully");
+            return "User having email" + email + " has been deleted successfully";
         } else {
             logger.warn("User with Email id " + email + " has not present");
             throw new UserNotFoundByEmailException("User with Email id " + email + " has not been found");
         }
+    }
+
+    @Override
+    public List<User> findUserByAgeGreater(int age) {
+        List<User> user = userRepository.findUserByAgeGreater(age);
+        if (user.isEmpty()) {
+            logger.warn("There is not any user having age greater than " + age);
+            throw new NoDataExistException("There is not any user having age greater than " + age);
+        } else {
+            logger.info("All users having age greater than " + age + " are fetched successfully");
+            return user;
+        }
+    }
+
+    @Override
+    public List<User> findUserByAgeLesser(int age) {
+        List<User> user = userRepository.findUserByAgeLesser(age);
+        if (user.isEmpty()) {
+            logger.warn("There is not any user having age lesser than " + age);
+            throw new NoDataExistException("There is not any user having age lesser than " + age);
+        } else {
+            logger.info("All users having age lesser than " + age + " are fetched successfully");
+            return user;
+        }
+    }
+
+    @Override
+    public List<User> findUserByAgeBetween(int age1, int age2) {
+        List<User> user = userRepository.findUserByAgeBetween(age1, age2);
+        if (user.isEmpty()) {
+            logger.warn("There is not any user having age between " + age1 + " and " + age2);
+            throw new NoDataExistException("There is not any user having age between " + age1 + " and " + age2);
+        } else {
+            logger.info("All users having age between " + age1 + " and " + age2 + " are fetched successfully");
+            return user;
+        }
+    }
+
+    @Override
+    public String updateUserByEmail(Long userId, String email) {
+        int i =userRepository.updateUserByEmail(userId,email);
+        return "User's email has been updated successfully";
+    }
+
+    @Override
+    public String updateUserByNumber(Long userId, String number) {
+        int i =userRepository.updateUserByNumber(userId,number);
+        return "User's number has been updated successfully";
     }
 }

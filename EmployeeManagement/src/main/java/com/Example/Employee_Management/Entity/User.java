@@ -1,11 +1,14 @@
 package com.Example.Employee_Management.Entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import java.time.LocalDate;
+
 
 
 @Getter
@@ -32,4 +35,23 @@ public class User {
 
     @Column(length=13, unique = true, nullable = false)
     private String number;
+
+    @Column(length = 3, nullable = false)
+    private int age;
+
+    @JsonIgnore
+    @Transient
+    private String gender;
+
+    @Enumerated(EnumType.STRING)
+    public Role role;
+
+    @Column(name="registration_date",nullable = false,updatable = false)
+    @Temporal(TemporalType.DATE)
+    private LocalDate date;
+
+    @PrePersist
+    protected void onCreate() {
+        date = LocalDate.now();
+    }
 }

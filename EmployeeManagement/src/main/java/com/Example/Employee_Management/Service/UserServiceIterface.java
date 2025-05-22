@@ -14,7 +14,12 @@ public interface UserServiceIterface {
     public User getUserByFirstNameAndEmail(String firstName, String email);
     public User getUserByLastNameAndEmail(String lastName, String email);
     public List<User> getAllUser();
-    public User updateUser(User user, Long userId);
+    public User updateUser(Long userId, User user);
     public String deleteUser(Long userId);
     public String deleteUserByEmail(String email);
+    public List<User> findUserByAgeGreater(int age);
+    public List<User> findUserByAgeLesser(int age);
+    public List<User> findUserByAgeBetween(int age1, int age2);
+    public String updateUserByEmail(Long userId, String email);
+    public String updateUserByNumber(Long userId, String number);
 }
