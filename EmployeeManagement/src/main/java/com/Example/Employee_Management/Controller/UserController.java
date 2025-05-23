@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -86,9 +87,11 @@ public class UserController {
     }
 
     @GetMapping("getAll")
-    public ResponseEntity<List<User>> getAllUser(){
+    public ResponseEntity<Page<User>> getAllUser(
+            @RequestParam(name="page", defaultValue="0") int pageNumber,
+            @RequestParam(name="size", defaultValue ="4") int pagesize){
         logger.info("User's data is going to be fetched");
-        List<User> user=userService.getAllUser();
+        Page<User> user=userService.getAllUser(pageNumber,pagesize);
         return new ResponseEntity<>(user,HttpStatus.OK);
     }
 
@@ -113,24 +116,24 @@ public class UserController {
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
-    @GetMapping("ageGreater/{age}")
-    public ResponseEntity<List<User>> getUsersByAge(@PathVariable(name="age") int age){
+    @GetMapping("ageGreater/{age}/{pageNo}/{pageSize}")
+    public ResponseEntity<Page<User>> getUsersByAge(@PathVariable(name="age") int age, @PathVariable(name="pageNo") int pageNo, @PathVariable(name="pageSize") int pageSize){
         logger.info("User's data with age is going to be fetched");
-        List<User> user=userService.findUserByAgeGreater(age);
-        return new ResponseEntity<>(user,HttpStatus.OK);
+        Page<User> user=userService.findUserByAgeGreater(age,pageNo ,pageSize );
+        return new ResponseEntity<>(user , HttpStatus.OK);
     }
 
-    @GetMapping("ageLess/{age}")
-    public ResponseEntity<List<User>> getUsersByAgeLess(@PathVariable(name="age") int age){
+    @GetMapping("ageLess/{age}/{pageNo}/{pageSize}")
+    public ResponseEntity<Page<User>> getUsersByAgeLess(@PathVariable(name="age") int age, @RequestParam(name="pageNo", defaultValue="0") int pageNo, @RequestParam(name="pageSize", defaultValue="4") int pageSize){
         logger.info("User data with age less than {} is going to be fetched", age);
-        List<User> user=userService.findUserByAgeLesser(age);
+        Page<User> user=userService.findUserByAgeLesser(age,pageNo,pageSize);
         return new ResponseEntity<>(user,HttpStatus.OK);
     }
 
-    @GetMapping("ageBetween/{age1}/{age2}")
-    public ResponseEntity<List<User>> getUsersByAgeBetween(@PathVariable(name="age1") int age1, @PathVariable(name="age2") int age2){
+    @GetMapping("ageBetween/{age1}/{age2}/{pageNo}/{pageSize}")
+    public ResponseEntity<Page<User>> getUsersByAgeBetween(@PathVariable(name="age1") int age1, @PathVariable(name="age2") int age2, @RequestParam(name="pageNo", defaultValue="0") int pageNo, @RequestParam(name="pageSize", defaultValue="4") int pageSize){
         logger.info("User data with age between {} and {} is going to be fetched", age1, age2);
-        List<User> user=userService.findUserByAgeBetween(age1,age2);
+        Page<User> user=userService.findUserByAgeBetween(age1,age2,pageNo,pageSize);
         return new ResponseEntity<>(user,HttpStatus.OK);
     }
 

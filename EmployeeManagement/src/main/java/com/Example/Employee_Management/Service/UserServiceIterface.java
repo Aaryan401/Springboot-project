@@ -1,6 +1,8 @@
 package com.Example.Employee_Management.Service;
 
 import com.Example.Employee_Management.Entity.User;
+import org.springframework.data.domain.Page;
+
 import java.util.List;
 
 public interface UserServiceIterface {
@@ -13,13 +15,13 @@ public interface UserServiceIterface {
     public User getUserByFirstNameAndLastName(String firstName, String lastName);
     public User getUserByFirstNameAndEmail(String firstName, String email);
     public User getUserByLastNameAndEmail(String lastName, String email);
-    public List<User> getAllUser();
+    public Page<User> getAllUser(int pageNo, int pageSize);
     public User updateUser(Long userId, User user);
     public String deleteUser(Long userId);
     public String deleteUserByEmail(String email);
-    public List<User> findUserByAgeGreater(int age);
-    public List<User> findUserByAgeLesser(int age);
-    public List<User> findUserByAgeBetween(int age1, int age2);
+    public Page<User> findUserByAgeGreater(int age, int pageNo, int pageSize);
+    public Page<User> findUserByAgeLesser(int age, int pageNo, int pageSize);
+    public Page<User> findUserByAgeBetween(int age1, int age2, int pageNo, int pageSize);
     public String updateUserByEmail(Long userId, String email);
     public String updateUserByNumber(Long userId, String number);
 }

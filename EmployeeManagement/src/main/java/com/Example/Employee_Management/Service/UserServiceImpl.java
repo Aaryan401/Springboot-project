@@ -7,6 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.Example.Employee_Management.Exception.CustomException.*;
 import java.util.List;
@@ -122,8 +125,9 @@ public class UserServiceImpl implements UserServiceIterface {
     }
 
     @Override
-    public List<User> getAllUser() {
-        List<User> user=userRepository.findAll();
+    public Page<User> getAllUser(int pageNo, int pageSize) {
+        Pageable pageable= PageRequest.of(pageNo,pageSize);
+        Page<User> user=userRepository.findAll(pageable);
         if(user.isEmpty()){
             logger.warn("Till now there is not any data exist");
             throw new NoDataExistException("Till now there is not any data exist");
@@ -189,8 +193,9 @@ public class UserServiceImpl implements UserServiceIterface {
     }
 
     @Override
-    public List<User> findUserByAgeGreater(int age) {
-        List<User> user = userRepository.findUserByAgeGreater(age);
+    public Page<User> findUserByAgeGreater(int age, int pageNo, int pageSize) {
+        Pageable pageable= PageRequest.of(pageNo,pageSize);
+        Page<User> user = userRepository.findUserByAgeGreater(pageable,age);
         if (user.isEmpty()) {
             logger.warn("There is not any user having age greater than " + age);
             throw new NoDataExistException("There is not any user having age greater than " + age);
@@ -201,8 +206,9 @@ public class UserServiceImpl implements UserServiceIterface {
     }
 
     @Override
-    public List<User> findUserByAgeLesser(int age) {
-        List<User> user = userRepository.findUserByAgeLesser(age);
+    public Page<User> findUserByAgeLesser(int age, int pageNo, int pageSize) {
+        Pageable pageable=PageRequest.of(pageNo,pageSize);
+        Page<User> user = userRepository.findUserByAgeLesser(pageable, age);
         if (user.isEmpty()) {
             logger.warn("There is not any user having age lesser than " + age);
             throw new NoDataExistException("There is not any user having age lesser than " + age);
@@ -213,8 +219,9 @@ public class UserServiceImpl implements UserServiceIterface {
     }
 
     @Override
-    public List<User> findUserByAgeBetween(int age1, int age2) {
-        List<User> user = userRepository.findUserByAgeBetween(age1, age2);
+    public Page<User> findUserByAgeBetween(int age1, int age2, int pageNo, int pageSize) {
+        Pageable pageable=PageRequest.of(pageNo,pageSize);
+        Page<User> user = userRepository.findUserByAgeBetween(pageable,age1, age2);
         if (user.isEmpty()) {
             logger.warn("There is not any user having age between " + age1 + " and " + age2);
             throw new NoDataExistException("There is not any user having age between " + age1 + " and " + age2);

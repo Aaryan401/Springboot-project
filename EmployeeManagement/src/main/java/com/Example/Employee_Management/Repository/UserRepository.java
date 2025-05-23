@@ -3,6 +3,8 @@ package com.Example.Employee_Management.Repository;
 
 import com.Example.Employee_Management.Entity.User;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -27,15 +29,17 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
     public Optional<User> findUserByFirstNameAndLastName(String firstName, String lastName);
 
+    public Page<User> findAll(Pageable pageable);
+
     @Query("SELECT u FROM User u WHERE u.age > :userAge ORDER BY u.age DESC")
-    public List<User> findUserByAgeGreater(@Param("userAge") int age);
+    public Page<User> findUserByAgeGreater(Pageable pageable, @Param("userAge") int age);
 
 
     @Query(value = "SELECT age FROM employees WHERE age < :userAge ORDER BY age ASC", nativeQuery = true )
-    public List<User> findUserByAgeLesser(@Param("userAge") int age);
+    public Page<User> findUserByAgeLesser(Pageable pageable , @Param("userAge") int age);
 
     @Query("SELECT u FROM User u WHERE u.age BETWEEN :userAge1 AND :userAge2 ORDER BY u.age ASC")
-    public List<User> findUserByAgeBetween(@Param("userAge1") int age1,@Param("userAge2") int age2);
+    public Page<User> findUserByAgeBetween(Pageable pageable, @Param("userAge1") int age1, @Param("userAge2") int age2);
 
     @Modifying
     @Transactional
