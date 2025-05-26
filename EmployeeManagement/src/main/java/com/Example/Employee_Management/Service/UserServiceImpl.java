@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import com.Example.Employee_Management.Exception.CustomException.*;
 import java.util.List;
@@ -242,4 +243,21 @@ public class UserServiceImpl implements UserServiceIterface {
         int i =userRepository.updateUserByNumber(userId,number);
         return "User's number has been updated successfully";
     }
+
+    @Override
+    public List<User> getUserSort(String columnName, boolean ascending) {
+        Sort sort=ascending? Sort.by(columnName).ascending():Sort.by(columnName).descending();
+        List<User> allSortedUser=userRepository.findAll(sort);
+        return allSortedUser;
+    }
+
+    @Override
+    public Page<User> getSortedUserInPage(String columnName, boolean ascending, int pageNumber, int pageSize) {
+        Sort sort=ascending?Sort.by(columnName).ascending():Sort.by(columnName).descending();
+        Pageable pageable=PageRequest.of(pageNumber,pageSize,sort);
+        Page<User> allSortedUserInPage=userRepository.findAll(pageable);
+        return allSortedUserInPage;
+    }
+
+
 }

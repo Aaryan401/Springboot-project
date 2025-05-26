@@ -24,4 +24,6 @@ public interface UserServiceIterface {
     public Page<User> findUserByAgeBetween(int age1, int age2, int pageNo, int pageSize);
     public String updateUserByEmail(Long userId, String email);
     public String updateUserByNumber(Long userId, String number);
+    public List<User> getUserSort(String columnName, boolean ascending);
+    public Page<User> getSortedUserInPage(String columnName, boolean ascending, int pageNumber, int pageSize);
 }

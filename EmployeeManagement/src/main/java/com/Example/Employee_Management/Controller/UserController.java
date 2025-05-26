@@ -150,4 +150,24 @@ public class UserController {
         String response=userService.updateUserByNumber(userId,user.getNumber());
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
+
+    @GetMapping("getUserSorted")
+    public ResponseEntity<List<User>> getSortedUser(
+            @RequestParam(defaultValue = "firstName") String columnName,
+            @RequestParam(defaultValue = "true") boolean ascending
+    ){
+        List<User> user=userService.getUserSort(columnName,ascending);
+        return new ResponseEntity<>(user,HttpStatus.OK);
+    }
+
+    @GetMapping("getSortedUserInPage")
+    public ResponseEntity<Page<User>> getSortedUserInPage(
+            @RequestParam(defaultValue = "firstName") String columnName,
+            @RequestParam(defaultValue = "true") boolean ascending,
+            @RequestParam(defaultValue= "0") int pageNumber,
+            @RequestParam(defaultValue = "4") int pageSize
+    ){
+        Page<User> user=userService.getSortedUserInPage(columnName,ascending,pageNumber,pageSize);
+        return new ResponseEntity<>(user,HttpStatus.OK);
+    }
 }
