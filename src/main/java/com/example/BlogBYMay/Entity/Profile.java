@@ -3,7 +3,6 @@ package com.example.BlogBYMay.Entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.LocalDateTime;
 
 @Getter
@@ -16,30 +15,45 @@ import java.time.LocalDateTime;
 public class Profile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false,unique = true,updatable = false)
     private Long profileId;
+
+    @Column(nullable = false)
     private String city;
+
+    @Column(nullable = false)
     private String state;
+
+    @Column(nullable = false)
     private String address;
+
+    @Column(nullable = false,length = 3)
     private String age;
+
+    @Column(nullable = false,unique = true,length = 13)
     private String mobile;
 
-    @Temporal(TemporalType.DATE)
-    private LocalDateTime profileCreatedDate;
+    @Column(nullable = false,length = 6)
+    private String pincode;
 
-    @Temporal(TemporalType.DATE)
-    private LocalDateTime profileUpdatedDate;
+    @Column(nullable = false,updatable = false)
+    private LocalDateTime profileCreatedDate;
 
     @PrePersist
     protected void onCreate() {
-        this.profileCreatedDate = LocalDateTime.now();
+      this.profileCreatedDate=LocalDateTime.now();
+      this.profileUpdatedDate = LocalDateTime.now();
     }
+
+    @Column(nullable = false)
+    private LocalDateTime profileUpdatedDate;
 
     @PostPersist
     protected void onUpdate() {
         this.profileUpdatedDate = LocalDateTime.now();
     }
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL ,fetch = FetchType.LAZY)
     @JoinColumn(name="user_id",unique = true)
     private User user;
 

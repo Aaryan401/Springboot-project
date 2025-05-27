@@ -2,6 +2,8 @@ package com.example.BlogBYMay.Service;
 
 import com.example.BlogBYMay.Entity.Profile;
 import com.example.BlogBYMay.Entity.User;
+import com.example.BlogBYMay.Model.AllProfileDetailsDTO;
+import com.example.BlogBYMay.Model.ProfileDto;
 import com.example.BlogBYMay.Repository.ProfileRepository;
 import com.example.BlogBYMay.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,5 +33,41 @@ public class UserServiceImpl implements UserServiceInterface{
        return "Your profile has been saved";
     }
 
+    //Without Using Builder
+    @Override
+    public ProfileDto getSomeProfileDetails(Long profileId) {
+        Profile profile=profileRepository.findById(profileId).orElseThrow(()->new RuntimeException("Profile not found"));
 
+                ProfileDto profileDto = new ProfileDto();
+                profileDto.setFullName(profile.getUser().getFirstName() + " " +profile.getUser().getLastName());
+                profileDto.setEmail(profile.getUser().getEmail());
+                profileDto.setCity(profile.getCity());
+                profileDto.setState(profile.getState());
+                profileDto.setPincode(profile.getPincode());
+
+        return profileDto;
+
+    }
+
+    //Uses of Builder
+    @Override
+    public AllProfileDetailsDTO getAllProfileDetails(Long profileId) {
+        Profile profile=profileRepository.findById(profileId).orElseThrow(()->new RuntimeException("Profile not found"));
+
+        AllProfileDetailsDTO allProfileDto = AllProfileDetailsDTO.builder()
+                .profileId(profile.getProfileId())
+                .fullName(profile.getUser().getFirstName() + " " + profile.getUser().getLastName())
+                .age(profile.getAge())
+                .email(profile.getUser().getEmail())
+                .mobile(profile.getMobile())
+                .address(profile.getAddress())
+                .city(profile.getCity())
+                .state(profile.getState())
+                .pincode(profile.getPincode())
+                .registerDate(profile.getUser().getRegisterDate())
+                .profileCreatedDate(profile.getProfileCreatedDate())
+                .profileUpdatedDate(profile.getProfileUpdatedDate())
+                .build();
+        return allProfileDto;
+    }
 }
