@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Getter
@@ -39,4 +41,7 @@ public class User {
     protected void onCreate(){
         this.registerDate = LocalDateTime.now();
     }
+
+    @OneToMany(mappedBy = "user", cascade= CascadeType.ALL, orphanRemoval=true)
+    private List<Post> posts=new ArrayList<>();
 }

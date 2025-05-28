@@ -3,21 +3,16 @@ package com.example.BlogBYMay.Model;
 import lombok.Builder;
 import lombok.Data;
 
-import java.time.LocalDateTime;
-
 @Data
 @Builder
-public class AllProfileDetailsDTO {
-    private Long profileId;
+public class UpdateProfileDto {
     private String fullName;
-    private int age;
     private String email;
+    private String password;
+    private int age;
     private String mobile;
     private String address;
     private String city;
     private String state;
     private String pincode;
-    private LocalDateTime registerDate;
-    private LocalDateTime profileCreatedDate;
-    private LocalDateTime profileUpdatedDate;
 }

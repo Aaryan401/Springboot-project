@@ -1,6 +1,7 @@
 package com.example.BlogBYMay.Entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
@@ -28,7 +29,7 @@ public class Profile {
     private String address;
 
     @Column(nullable = false,length = 3)
-    private String age;
+    private int age;
 
     @Column(nullable = false,unique = true,length = 13)
     private String mobile;
@@ -55,6 +56,7 @@ public class Profile {
 
     @OneToOne(cascade = CascadeType.ALL ,fetch = FetchType.LAZY)
     @JoinColumn(name="user_id",unique = true)
+    @JsonIgnore
     private User user;
 
 }
