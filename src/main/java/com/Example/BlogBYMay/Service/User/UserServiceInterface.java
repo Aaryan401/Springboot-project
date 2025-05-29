@@ -1,4 +1,4 @@
-package com.example.BlogBYMay.Service;
+package com.example.BlogBYMay.Service.User;
 
 import com.example.BlogBYMay.Entity.Profile;
 import com.example.BlogBYMay.Entity.User;

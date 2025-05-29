@@ -49,7 +49,7 @@ public class Profile {
     @Column(nullable = false)
     private LocalDateTime profileUpdatedDate;
 
-    @PostPersist
+    @PreUpdate
     protected void onUpdate() {
         this.profileUpdatedDate = LocalDateTime.now();
     }

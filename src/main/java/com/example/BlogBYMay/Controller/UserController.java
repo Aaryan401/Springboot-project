@@ -5,7 +5,7 @@ import com.example.BlogBYMay.Entity.User;
 import com.example.BlogBYMay.Model.AllProfileDetailsDTO;
 import com.example.BlogBYMay.Model.ProfileDto;
 import com.example.BlogBYMay.Model.UpdateProfileDto;
-import com.example.BlogBYMay.Service.UserServiceImpl;
+import com.example.BlogBYMay.Service.User.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

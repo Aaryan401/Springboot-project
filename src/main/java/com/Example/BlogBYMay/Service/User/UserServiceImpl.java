@@ -1,4 +1,4 @@
-package com.example.BlogBYMay.Service;
+package com.example.BlogBYMay.Service.User;
 
 import com.example.BlogBYMay.Entity.Profile;
 import com.example.BlogBYMay.Entity.User;
@@ -7,6 +7,7 @@ import com.example.BlogBYMay.Model.ProfileDto;
 import com.example.BlogBYMay.Model.UpdateProfileDto;
 import com.example.BlogBYMay.Repository.ProfileRepository;
 import com.example.BlogBYMay.Repository.UserRepository;
+import com.example.BlogBYMay.Service.User.UserServiceInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
