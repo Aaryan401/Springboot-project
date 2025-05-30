@@ -25,7 +25,7 @@ public class Post {
     private String title;
 
     @Column(nullable = false,columnDefinition = "TEXT")
-    private String Description;
+    private String description;
 
     @Column(nullable = false)
     private String image;

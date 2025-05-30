@@ -1,10 +1,12 @@
 package com.example.BlogBYMay.Service.User;
 
+import com.example.BlogBYMay.Entity.Course;
 import com.example.BlogBYMay.Entity.Profile;
 import com.example.BlogBYMay.Entity.User;
 import com.example.BlogBYMay.Model.AllProfileDetailsDTO;
 import com.example.BlogBYMay.Model.ProfileDto;
 import com.example.BlogBYMay.Model.UpdateProfileDto;
+import com.example.BlogBYMay.Repository.CourseRepository;
 import com.example.BlogBYMay.Repository.ProfileRepository;
 import com.example.BlogBYMay.Repository.UserRepository;
 import com.example.BlogBYMay.Service.User.UserServiceInterface;
@@ -20,6 +22,8 @@ public class UserServiceImpl implements UserServiceInterface {
     private final UserRepository userRepository;
 
     private final ProfileRepository profileRepository;
+
+    private final CourseRepository courseRepository;
 
     @Override
     public String saveUser(User user) {
@@ -109,5 +113,14 @@ public class UserServiceImpl implements UserServiceInterface {
     public String deleteProfile(Long profileId) {
         profileRepository.deleteById(profileId);
         return "Porfile " + profileId + " has been deleted";
+    }
+
+    public String enrollInCourse(Long userId,Long courseId){
+        User foundUser = userRepository.findById(userId).orElseThrow(()->new RuntimeException("User not found"));
+        Course foundCourse = courseRepository.findById(courseId).orElseThrow(()->new RuntimeException("Course not found"));
+
+        foundUser.getCourses().add(foundCourse);
+        userRepository.save(foundUser);
+        return "User" +userId +"have successfully enrolled in "+foundCourse.getCourseName();
     }
 }

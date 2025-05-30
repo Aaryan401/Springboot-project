@@ -31,15 +31,22 @@ public class PostController {
         return new ResponseEntity<>(post, HttpStatus.OK);
     }
 
+    @GetMapping("getAllPostOfUser/{userId}")
+    public ResponseEntity<List<PostDto>> getAllPostofUser(@PathVariable(name="userId") Long userId){
+        List<PostDto> post = postService.getAllPostOfUser(userId);
+        return new ResponseEntity<>(post, HttpStatus.OK);
+    }
+
+
     @GetMapping("getAllPost")
     public ResponseEntity<List<Post>> getAllPost(){
         List<Post> post = postService.getAllPost();
         return new ResponseEntity<>(post,HttpStatus.OK);
     }
 
-    @PutMapping("updatePost/{userId}")
-    public ResponseEntity<String> updatePost(@PathVariable(name="userId") Long userId, @RequestBody PostDto postDto){
-        String response = postService.updatePost(userId,postDto);
+    @PutMapping("updatePost/{userId}/{postId}")
+    public ResponseEntity<String> updatePost(@PathVariable(name="userId") Long userId, @PathVariable Long postId, @RequestBody PostDto postDto){
+        String response = postService.updatePost(userId,postId,postDto);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

@@ -6,7 +6,9 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @Getter
@@ -42,6 +44,15 @@ public class User {
         this.registerDate = LocalDateTime.now();
     }
 
-    @OneToMany(mappedBy = "user", cascade= CascadeType.ALL, orphanRemoval=true)
+    @OneToMany(mappedBy = "user", cascade= CascadeType.ALL, orphanRemoval=true, fetch = FetchType.LAZY)
     private List<Post> posts=new ArrayList<>();
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name= "student_course",
+            joinColumns =@JoinColumn(name="student_id"),
+            inverseJoinColumns = @JoinColumn(name="course_id")
+    )
+    private Set<Course> courses=new HashSet<>();
+
 }
