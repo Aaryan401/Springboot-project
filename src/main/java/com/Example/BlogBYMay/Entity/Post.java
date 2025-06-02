@@ -1,6 +1,7 @@
 package com.example.BlogBYMay.Entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,12 +23,15 @@ public class Post {
     private Long postId;
 
     @Column(nullable = false)
+    @NotBlank(message = "Title must not be blank")
     private String title;
 
     @Column(nullable = false,columnDefinition = "TEXT")
+    @NotBlank(message = "Description must not be blank")
     private String description;
 
     @Column(nullable = false)
+    @NotBlank(message = "Image must not be blank")
     private String image;
 
     @Column(nullable = false,updatable=false)

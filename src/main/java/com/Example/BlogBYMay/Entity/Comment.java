@@ -2,6 +2,7 @@ package com.example.BlogBYMay.Entity;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,7 @@ public class Comment {
     private Long commentId;
 
     @Column(columnDefinition = "TEXT")
+    @NotBlank(message = "Comment must not be blank")
     private String comment;
 
     @Column(nullable = false,updatable = false)

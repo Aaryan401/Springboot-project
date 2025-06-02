@@ -3,6 +3,7 @@ package com.example.BlogBYMay.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -24,6 +25,7 @@ public class Course {
     private Long courseId;
 
     @Column(nullable = false)
+    @NotBlank(message = "Course name must not be blank")
     private String courseName;
 
     @Column(nullable = false, updatable = false)

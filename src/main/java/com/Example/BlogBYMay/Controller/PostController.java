@@ -3,6 +3,7 @@ package com.example.BlogBYMay.Controller;
 import com.example.BlogBYMay.Entity.Post;
 import com.example.BlogBYMay.Model.PostDto;
 import com.example.BlogBYMay.Service.Post.PostServiceImpl;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,7 +21,7 @@ public class PostController {
     private final PostServiceImpl postService;
 
     @PostMapping("post/{userId}")
-    public ResponseEntity<String> crtatePost(@PathVariable(name="userId") Long userId, @RequestBody Post post){
+    public ResponseEntity<String> crtatePost(@PathVariable(name="userId") Long userId,@Valid @RequestBody Post post){
         String response = postService.savePost(userId,post);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
@@ -45,7 +46,7 @@ public class PostController {
     }
 
     @PutMapping("updatePost/{userId}/{postId}")
-    public ResponseEntity<String> updatePost(@PathVariable(name="userId") Long userId, @PathVariable Long postId, @RequestBody PostDto postDto){
+    public ResponseEntity<String> updatePost(@PathVariable(name="userId") Long userId, @PathVariable Long postId,@Valid @RequestBody PostDto postDto){
         String response = postService.updatePost(userId,postId,postDto);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

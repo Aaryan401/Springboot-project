@@ -3,6 +3,7 @@ package com.example.BlogBYMay.Controller;
 
 import com.example.BlogBYMay.Entity.Course;
 import com.example.BlogBYMay.Service.Course.CourseServiceImpl;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,7 +21,7 @@ public class AdminController {
     private final CourseServiceImpl courseService;
 
     @PostMapping("saveCourse")
-    public ResponseEntity<String> saveCourse(@RequestBody Course course){
+    public ResponseEntity<String> saveCourse(@Valid @RequestBody Course course){
         String response = courseService.SaveCourse(course);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }

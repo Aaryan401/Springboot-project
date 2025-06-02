@@ -4,6 +4,7 @@ package com.example.BlogBYMay.Controller;
 import com.example.BlogBYMay.Entity.Comment;
 import com.example.BlogBYMay.Model.CommentDto;
 import com.example.BlogBYMay.Service.Comment.CommentServiceImpl;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,7 +22,7 @@ public class CommentController {
     private final CommentServiceImpl commentService;
 
     @PostMapping("comment/{userId}/{postId}")
-    public ResponseEntity<String> createComment(@PathVariable(name="postId") Long postId,@PathVariable(name= "userId") Long userId,@RequestBody Comment comment){
+    public ResponseEntity<String> createComment(@PathVariable(name="postId") Long postId,@PathVariable(name= "userId") Long userId,@Valid @RequestBody Comment comment){
         String response=commentService.saveComment(postId,userId,comment);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
@@ -33,7 +34,7 @@ public class CommentController {
     }
 
     @PutMapping("updateComment/{postId}")
-    public ResponseEntity<String> updateComment(@PathVariable(name="postId") Long postId,@RequestBody CommentDto commentDto){
+    public ResponseEntity<String> updateComment(@PathVariable(name="postId") Long postId,@Valid @RequestBody CommentDto commentDto){
         String response=commentService.updateComment(postId,commentDto);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
