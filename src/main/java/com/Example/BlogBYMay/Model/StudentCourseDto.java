@@ -12,7 +12,6 @@ import java.util.List;
 @Builder
 public class StudentCourseDto {
 
-    @NotBlank(message = "Course Id must not be blank")
     private Long courseId;
 
     @NotBlank(message = "Full name must cannot be Blank")

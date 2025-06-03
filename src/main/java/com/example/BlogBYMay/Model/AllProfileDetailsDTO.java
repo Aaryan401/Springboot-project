@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 public class AllProfileDetailsDTO {
+
     private Long profileId;
 
     @NotBlank(message="Full name must not be Blank")
@@ -39,6 +40,8 @@ public class AllProfileDetailsDTO {
     @NotBlank(message = "Pincode must not be Blank")
     @Size(min=6,max=6,message = "Pincode must have 6 digit")
     private String pincode;
+
+    private String image;
 
     private LocalDateTime registerDate;
     private LocalDateTime profileCreatedDate;

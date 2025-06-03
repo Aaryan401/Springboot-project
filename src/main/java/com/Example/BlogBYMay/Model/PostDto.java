@@ -8,12 +8,10 @@ import lombok.Data;
 @Data
 @Builder
 public class PostDto {
-
-    @NotBlank(message = "Post Id must not be blank")
     private Long postId;
 
     @NotBlank(message = "Full Name must not be blank")
-    @Pattern(regexp="^[A-Za-z]+$", message = "Full Name must contain only alphabet")
+    @Pattern(regexp="^[A-Za-z]+(?:\s[A-za-z]+)*$", message = "Full Name must contain only alphabet")
     private String fullName;
 
     @NotBlank(message = "Title must not be blank")

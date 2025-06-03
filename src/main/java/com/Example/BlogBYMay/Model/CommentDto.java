@@ -10,11 +10,10 @@ import lombok.Data;
 @Builder
 public class CommentDto {
 
-    @NotBlank(message = "Post Id must not be blank")
     public Long commentId;
 
     @NotBlank(message = "Full Name must not be blank")
-    @Pattern(regexp="^[A-Za-z]+$", message = "Full Name must contain only alphabet")
+    @Pattern(regexp="^[A-Za-z]+(?:\s[A-Za-z]+)*$", message = "Full Name must contain only alphabet")
     public String fullName;
 
     @NotBlank(message = "Comment must not be blank")

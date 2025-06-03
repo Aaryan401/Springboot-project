@@ -12,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 
 @RestController
@@ -29,8 +32,9 @@ public class UserController {
     }
 
     @PostMapping("registerProfile/{id}")
-    public ResponseEntity<String> saveProfile(@PathVariable(name="id") Long userId,@Valid @RequestBody Profile profile){
-        String response=userService.saveProfile(userId,profile);
+    public ResponseEntity<String> saveProfile(@PathVariable(name="id") Long userId,@Valid @RequestPart("profile") Profile profile,
+                                              @RequestParam("file") MultipartFile file) throws IOException {
+        String response=userService.saveProfile(userId,profile,file);
         return new ResponseEntity<>(response,HttpStatus.CREATED);
     }
 
@@ -41,8 +45,7 @@ public class UserController {
     }
 
     @GetMapping("getAllDetails/{id}")
-    public ResponseEntity<AllProfileDetailsDTO> getAllProfileDetails(@PathVariable(name="id") Long profileId){
-        userService.printedValue();
+    public ResponseEntity<AllProfileDetailsDTO> getAllProfileDetails(@PathVariable(name="id") Long profileId) throws IOException{
         AllProfileDetailsDTO allProfileDto=userService.getAllProfileDetails(profileId);
         return new ResponseEntity<>(allProfileDto,HttpStatus.OK);
     }
@@ -54,7 +57,7 @@ public class UserController {
      }
 
 
-    @PutMapping("update/{profileId}")
+    @PutMapping("updateProfile/{profileId}")
     public ResponseEntity<Profile> updateProfile(@PathVariable(name="profileId") Long profileId,@Valid @RequestBody Profile profile){
         Profile updatedProfile=userService.updateProfile(profileId, profile);
         return new ResponseEntity<>(updatedProfile,HttpStatus.OK);
