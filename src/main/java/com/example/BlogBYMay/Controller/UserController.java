@@ -6,6 +6,7 @@ import com.example.BlogBYMay.Model.AllProfileDetailsDTO;
 import com.example.BlogBYMay.Model.ProfileDto;
 import com.example.BlogBYMay.Model.UpdateProfileDto;
 import com.example.BlogBYMay.Service.User.UserServiceImpl;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class UserController {
     public final UserServiceImpl userService;
     
     @PostMapping("registerUser")
-    public ResponseEntity<String> saveUser(@Valid @RequestBody User user){
+    public ResponseEntity<String> saveUser(@Valid @RequestBody User user) throws MessagingException {
         String response=userService.saveUser(user);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
