@@ -1,16 +1,22 @@
 package com.example.BlogBYMay.Service.User;
 
+import com.example.BlogBYMay.Entity.Course;
 import com.example.BlogBYMay.Entity.Profile;
 import com.example.BlogBYMay.Entity.User;
 import com.example.BlogBYMay.Model.AllProfileDetailsDTO;
 import com.example.BlogBYMay.Model.ProfileDto;
 import com.example.BlogBYMay.Model.UpdateProfileDto;
+import com.example.BlogBYMay.Repository.CourseRepository;
 import com.example.BlogBYMay.Repository.ProfileRepository;
 import com.example.BlogBYMay.Repository.UserRepository;
-import com.example.BlogBYMay.Service.User.UserServiceInterface;
+import com.example.BlogBYMay.Service.Utility.ImageService;
+import org.springframework.beans.factory.annotation.Value;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RequiredArgsConstructor
 @Service
@@ -21,6 +27,10 @@ public class UserServiceImpl implements UserServiceInterface {
 
     private final ProfileRepository profileRepository;
 
+    private final CourseRepository courseRepository;
+
+    private final ImageService imageService;
+
     @Override
     public String saveUser(User user) {
         userRepository.save(user);
@@ -28,8 +38,10 @@ public class UserServiceImpl implements UserServiceInterface {
     }
 
     @Override
-    public String saveProfile(Long userId, Profile profile) {
+    public String saveProfile(Long userId, Profile profile, MultipartFile file) throws IOException {
         User foundUser = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        String imageFile = imageService.saveImage(file);
+        profile.setImage(imageFile);
         profile.setUser(foundUser);
         profileRepository.save(profile);
         return "Your profile has been saved";
@@ -53,11 +65,12 @@ public class UserServiceImpl implements UserServiceInterface {
 
     //Uses of Builder
     @Override
-    public AllProfileDetailsDTO getAllProfileDetails(Long profileId) {
+    public AllProfileDetailsDTO getAllProfileDetails(Long profileId) throws IOException{
         Profile profile = profileRepository.findById(profileId).orElseThrow(() -> new RuntimeException("Profile not found"));
 
         AllProfileDetailsDTO allProfileDto = AllProfileDetailsDTO.builder()
                 .profileId(profile.getProfileId())
+                .image(imageService.getUploadDirectory(profile.getImage()))
                 .fullName(profile.getUser().getFirstName() + " " + profile.getUser().getLastName())
                 .age(profile.getAge())
                 .email(profile.getUser().getEmail())
@@ -109,5 +122,39 @@ public class UserServiceImpl implements UserServiceInterface {
     public String deleteProfile(Long profileId) {
         profileRepository.deleteById(profileId);
         return "Porfile " + profileId + " has been deleted";
+    }
+
+    public String enrollInCourse(Long userId,Long courseId){
+        User foundUser = userRepository.findById(userId).orElseThrow(()->new RuntimeException("User not found"));
+        Course foundCourse = courseRepository.findById(courseId).orElseThrow(()->new RuntimeException("Course not found"));
+
+        foundUser.getCourses().add(foundCourse);
+        userRepository.save(foundUser);
+        return "User" +userId +"have successfully enrolled in "+foundCourse.getCourseName();
+    }
+
+    @Value("${app.name}")
+    private String name;
+
+    @Value("${app.version:1.0.0}")
+    private String version;
+
+    @Value("${app.owner}")
+    private String user;
+
+    @Value("${app.supported-languages}")
+    private String [] languages;
+
+    @Value("#{T(java.lang.Math).random()*100}")
+    private Double random;
+
+    public void printedValue(){
+        System.out.println("Name:- "+name);
+        System.out.println("Version:- "+version);
+        System.out.println("App Owner:- "+user);
+        for(String lang:languages)
+            System.out.println("App Supported Languages:- "+lang);
+
+        System.out.println("Random No. "+random);
     }
 }

@@ -69,15 +69,16 @@ public class PostServiceImpl implements PostServiceInterface {
 
 
     @Override
-    public String updatePost(Long userId, PostDto postDto) {
+    public String updatePost(Long userId,Long postId, PostDto postDto) {
         Post post= postRepository.findByUserUserId(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        Post post1 = postRepository.findById(postId).orElseThrow(() -> new RuntimeException("Post not found"));
         String [] str=postDto.getFullName().split(" ");
-        post.getUser().setFirstName(str[0]);
-        post.getUser().setLastName(str[1]);
-        post.setTitle(postDto.getTitle());
-        post.setDescription(postDto.getDescription());
-        post.setImage(postDto.getImage());
-        postRepository.save(post);
+        post1.getUser().setFirstName(str[0]);
+        post1.getUser().setLastName(str[1]);
+        post1.setTitle(postDto.getTitle());
+        post1.setDescription(postDto.getDescription());
+        post1.setImage(postDto.getImage());
+        postRepository.save(post1);
         return "post has been updated successfully";
     }
 

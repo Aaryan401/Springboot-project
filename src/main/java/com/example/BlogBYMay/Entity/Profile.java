@@ -3,6 +3,7 @@ package com.example.BlogBYMay.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import java.time.LocalDateTime;
 
@@ -20,22 +21,33 @@ public class Profile {
     private Long profileId;
 
     @Column(nullable = false)
+    @NotBlank(message = "City cannot be null or blank")
     private String city;
 
     @Column(nullable = false)
+    @NotBlank(message = "State cannot be null or blank")
     private String state;
 
     @Column(nullable = false)
+    @NotBlank(message = "Address cannot be null or blank")
     private String address;
 
     @Column(nullable = false,length = 3)
+    @NotNull(message = "Age cannot be null")
+    @Min(value = 18,message = "Age must be greater than 18")
     private int age;
 
     @Column(nullable = false,unique = true,length = 13)
+    @NotBlank(message = "Mobile number cannot be null or blank")
+    @Size(min = 10,max = 13,message = "Mobile number must be 10 digits")
     private String mobile;
 
     @Column(nullable = false,length = 6)
+    @NotBlank(message = "Pincode cannot be null or blank")
+    @Size(min = 6,max = 6,message = "Pincode must be 6 digits")
     private String pincode;
+
+    private String image;
 
     @Column(nullable = false,updatable = false)
     private LocalDateTime profileCreatedDate;

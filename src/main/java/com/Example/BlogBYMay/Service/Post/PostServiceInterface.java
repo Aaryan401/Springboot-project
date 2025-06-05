@@ -9,6 +9,6 @@ public interface PostServiceInterface {
     public PostDto getPostById(Long postId);
     public List<Post> getAllPost();
     public List<PostDto> getAllPostOfUser(Long userId);
-    public String updatePost(Long userId, PostDto postDto);
+    public String updatePost(Long userId,Long postId, PostDto postDto);
     public String deletePost(Long postId);
 }
