@@ -13,7 +13,7 @@
         </processorPath>
         <module name="Employee_Management" />
       </profile>
-      <profile name="Annotation profile for Blog_By_May" enabled="true">
+      <profile name="Annotation profile for Product_Details" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />

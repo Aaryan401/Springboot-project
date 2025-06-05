@@ -9,7 +9,9 @@ import com.example.BlogBYMay.Model.UpdateProfileDto;
 import com.example.BlogBYMay.Repository.CourseRepository;
 import com.example.BlogBYMay.Repository.ProfileRepository;
 import com.example.BlogBYMay.Repository.UserRepository;
+import com.example.BlogBYMay.Service.Utility.EmailService;
 import com.example.BlogBYMay.Service.Utility.ImageService;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Value;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +33,15 @@ public class UserServiceImpl implements UserServiceInterface {
 
     private final ImageService imageService;
 
+    private final EmailService emailService;
+
     @Override
-    public String saveUser(User user) {
+    public String saveUser(User user) throws MessagingException {
+        String to=user.getEmail();
+        String subject="Greetings from Online Blog Application";
+        String message=emailService.registerEmail(user.getEmail());
         userRepository.save(user);
+        emailService.sendStandardEmail(to,subject,message);
         return "Your account has been created";
     }
 

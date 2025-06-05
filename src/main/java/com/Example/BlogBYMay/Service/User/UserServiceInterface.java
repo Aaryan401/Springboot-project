@@ -5,12 +5,13 @@ import com.example.BlogBYMay.Entity.User;
 import com.example.BlogBYMay.Model.AllProfileDetailsDTO;
 import com.example.BlogBYMay.Model.ProfileDto;
 import com.example.BlogBYMay.Model.UpdateProfileDto;
+import jakarta.mail.MessagingException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
 public interface UserServiceInterface {
-    public String saveUser(User user);
+    public String saveUser(User user) throws MessagingException;
     public String saveProfile(Long userId,Profile profile, MultipartFile file) throws IOException;
     public ProfileDto getSomeProfileDetails(Long profileId);
     public AllProfileDetailsDTO getAllProfileDetails(Long profileId) throws IOException;
