@@ -9,6 +9,7 @@ import com.example.BlogBYMay.Service.User.UserServiceImpl;
 import com.example.BlogBYMay.Service.Utility.EmailService;
 import com.example.BlogBYMay.Service.Utility.ImageService;
 import jakarta.mail.MessagingException;
+import org.assertj.core.api.AbstractStringAssert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.multipart.MultipartFile;
 
 
 import java.io.IOException;
@@ -49,6 +51,7 @@ public class UserServiceTest {
     private Profile profile;
     private Long profileId;
     private Long userId;
+    private MultipartFile file;
 
     @BeforeEach
     public void setUp(){
@@ -103,19 +106,22 @@ public class UserServiceTest {
     }
 
 
+
     @Test
     public void testSaveProfile() throws IOException{
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
         when(profileRepository.save(any(Profile.class))).thenReturn(profile);
-
-        String response = userService.saveProfile(userId, profile, null);
+        when(imageService.saveImage(file)).thenReturn("image.jpg");
+        String response = userService.saveProfile(userId, profile, file);
         assertThat(response).isEqualTo("Your profile has been saved");
         verify(profileRepository).save(profile);
+        verify(imageService).saveImage(file);
+        verify(userRepository).findById(userId);
         System.out.println("Test passed");
     }
 
     @Test
-    public void testgetSomeProfileDetails_successful(){
+    public void testGetSomeProfileDetails_successful(){
         when(profileRepository.findById(profileId)).thenReturn(Optional.of(profile));
         ProfileDto someProfileDetails = userService.getSomeProfileDetails(profileId);
         assertThat(someProfileDetails).isNotNull();
@@ -129,10 +135,38 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testgetSomeProfileDetails_ProfileNotFound(){
+    public void testGetSomeProfileDetails_ProfileNotFound(){
         when(profileRepository.findById(profileId)).thenReturn(Optional.empty());
         RuntimeException runtimeException = assertThrows(RuntimeException.class, () -> userService.getSomeProfileDetails(profileId));
         assertThat(runtimeException.getMessage()).isEqualTo("Profile not found");
+        System.out.println("Test passed");
+    }
+
+    @Test
+    public void testUpdateProfile(){
+        when(profileRepository.findById(profileId)).thenReturn(Optional.of(profile));
+        profile.setAge(24);
+        profile.setAddress("Garudacharpalya, Mahadevapura");
+        when(profileRepository.save(any(Profile.class))).thenReturn(profile);
+
+        Profile updatedProfile = userService.updateProfile(profileId, profile);
+        assertThat(updatedProfile.getAge()).isEqualTo(24);
+        assertThat(updatedProfile.getAddress()).isEqualTo("Garudacharpalya, Mahadevapura");
+        assertThat(updatedProfile.getCity()).isEqualTo("Bangalore");
+        assertThat(updatedProfile.getState()).isEqualTo("Karnataka");
+        assertThat(updatedProfile.getPincode()).isEqualTo("560048");
+        assertThat(updatedProfile.getMobile()).isEqualTo("8409141589");
+        verify(profileRepository).save(profile);
+        System.out.println("Test passed");
+    }
+
+    @Test
+    public void testdeleteProfile(){
+        doNothing().when(profileRepository).deleteById(profileId);
+
+        String response = userService.deleteProfile(profileId);
+        assertThat(response).isEqualTo("Porfile " + profileId + " has been deleted");
+        verify(profileRepository).deleteById(profileId);
         System.out.println("Test passed");
     }
 }
