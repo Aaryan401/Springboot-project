@@ -161,10 +161,10 @@ public class EmailService {
                 "</html>";
     }
 
-    @Scheduled(fixedRate = 2000)
-    public void reportCurrentTime(){
-        System.out.println("Blog Current time: "+System.currentTimeMillis());
-    }
+//    @Scheduled(fixedRate = 2000)
+//    public void reportCurrentTime(){
+//        System.out.println("Blog Current time: "+System.currentTimeMillis());
+//    }
 
     @Scheduled(cron = "0 10 23 * * *")
     public void sendEmail(){
